@@ -1,10 +1,28 @@
 
+import { useRouter } from 'next/router'
+
 export default function Home({ posts }) {
+  const router = useRouter()
+  const { pp } = router.query
   return (
     <div>
-      XXXX {posts.hitokoto}
+      PP  { pp }
     </div>
   )
+}
+
+
+// Generates `/posts/1` and `/posts/2`
+export async function getStaticPaths() {
+  const res = await fetch('https://v1.hitokoto.cn/')
+  const posts = await res.json()
+
+  console.log("getStaticPaths 执行", posts)
+
+  return {
+    paths: [{ params: { pp: '1' } }, { params: { pp: '2' } }],
+    fallback: false, // can also be true or 'blocking'
+  }
 }
 
 export async function getStaticProps() {
