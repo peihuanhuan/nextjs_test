@@ -2,26 +2,45 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-export default function Home({ posts }) {
+export default function Home({ data }) {
   return (
-    <div className={styles.container}>
-      {posts.hitokoto}
-    </div>
+      <>
+        <div className={styles.container}>
+          {/*{posts.hitokoto}*/}
+        </div>
+        <div className={styles.container}>
+          {data.hitokoto}
+        </div>
+      </>
   )
 }
 
-export async function getStaticProps() {
-  // Call an external API endpoint to get posts
+export async function getServerSideProps() {
   const res = await fetch('https://v1.hitokoto.cn/')
-  const posts = await res.json()
+  const data = await res.json()
 
-  console.log(",,,,,,", posts)
+  console.log("getServerSideProps ", data)
 
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
   return {
     props: {
-      posts,
+      data,
     },
   }
 }
+
+
+// export async function getStaticProps() {
+//   // Call an external API endpoint to get posts
+//   const res = await fetch('https://v1.hitokoto.cn/')
+//   const posts = await res.json()
+//
+//   console.log("getStaticProps ", posts)
+//
+//   // By returning { props: { posts } }, the Blog component
+//   // will receive `posts` as a prop at build time
+//   return {
+//     props: {
+//       posts,
+//     },
+//   }
+// }
